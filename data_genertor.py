@@ -6,8 +6,7 @@ class simulation_data():
     """
         The class used to generate the simulation data for the tests
     """
-    def __init__(self,p=600,n=71,seed=100):
-        self.seed = seed
+    def __init__(self,p=600,n=71):
         self.p = p          # dim
         self.n = n          # num of samples
         self.X = None
@@ -36,24 +35,27 @@ class simulation_data():
         #part1
         num_p1_1 = num_part1 // 8
         num_p2_2 = num_part1 - num_p1_1
-        sep_point = int(num_p2_2 * 0.92)
-        tmp1 = np.sin([np.pi/(num_p2_2+1) * i for i in range(1,sep_point)]) * 3
+        sep_point = int(num_p2_2 * 0.8)
+        tmp1 = np.sin([np.pi/(num_p2_2-4) * i for i in range(1,sep_point)]) * 3
         tmp2 = np.ones(num_p1_1) * tmp1[-1]
-        tmp3 = np.sin([np.pi/(num_p2_2+1) * i for i in range(sep_point,num_p2_2+1)]) * 3
+        tmp3 = np.sin([np.pi/(num_p2_2-4) * i for i in range(sep_point,num_p2_2+1)]) * 3
         part1 = np.concatenate([tmp1,tmp2,tmp3])
 
         #part2
         num_p2_1 = num_part2 // 2 + 1
         num_p2_2 = num_part2 - num_p2_1
-        slop = 5 / num_p2_1
-        tmp1 = np.array([slop*i for i in range(1,num_p2_1+1)])
-        tmp2 = np.array([5-slop*i for i in range(1,num_p2_2+1)])
+        slop = 5.5 / num_p2_1
+        tmp1 = np.array([slop*i for i in range(num_p2_1)]) - 0.2
+        tmp2 = np.array([5-slop*i for i in range(1,num_p2_2+1)]) - 0.2
         part2 = np.concatenate([tmp1,tmp2])
 
         self.beta[1:(len(part1)+1)] = part1
         self.beta[(len(part1)+30):(len(part1)+30+len(part2))] = part2
 
         return self.beta
+
+    def set_beta(self, beta):
+        self.beta = beta
 
     def gen_mu_cov(self,case=1):
         assert case in [1,2],"ERROR"
@@ -69,8 +71,7 @@ class simulation_data():
                     cov_[j,i] = v
         return mu_,cov_
 
-    def gen_X(self,mu=None,cov=None,seed=None):
-        np.random.seed(seed if seed is not None else self.seed)
+    def gen_X(self,mu=None,cov=None):
         if mu is None:
             mu_ = np.zeros(self.p)  # default: zero mean
         else:
@@ -82,8 +83,7 @@ class simulation_data():
         self.X = multivariate_normal(mu_,cov_, self.n)
         return self.X
 
-    def gen_Y(self,std=1,form="norm",df=5,seed=None):
-        np.random.seed(seed if seed is not None else self.seed)
+    def gen_Y(self,std=1,form="norm",df=5):
         if form == "norm":
             e = standard_normal(self.n)
         elif form == "t":
@@ -98,8 +98,17 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     data = simulation_data(p=600,n=71)
     beta = data.gen_beta(58,21)
-    plt.plot(beta)
+    print((beta>0).sum())
+    print((beta<0).sum())
+    plt.figure(figsize=(16, 8))
+    plt.plot(beta, "o")
+    plt.xlabel("location", fontsize=15)
+    plt.ylabel("beta", fontsize=15)
+    plt.xticks(fontsize=15)
+    plt.yticks(fontsize=15)
+    plt.savefig("test.png")
     plt.show()
     mu,cov = data.gen_mu_cov(case=2)
     data.gen_X(mu,cov)
     data.gen_Y(std=3,form="t")
+

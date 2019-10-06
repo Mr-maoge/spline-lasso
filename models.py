@@ -1,10 +1,10 @@
 import numpy as np
 from copy import deepcopy
-from scipy.optimize import fmin,brute
+from scipy.optimize import minimize,minimize_scalar
 
 def _soft_thresholding(x, alpha):
     """
-        A function used when solving Lasso & MCP by Coordinate Descent algorithm.
+        A function used when fitting Lasso & MCP model by Coordinate Descent algorithm.
     """
     if x > 0.0 and alpha < abs(x):
         return x - alpha
@@ -30,12 +30,14 @@ def second_stage_thresholding(betas,p):
 
 class Lasso():
 
-    def __init__(self, lambda_: float = 1.0, max_iter: int = 1000, second_stage: bool =True) -> None:
+    def __init__(self, lambda_: float = 1.0, max_iter: int = 1000,
+                 second_stage: bool =True,silence: bool =True) -> None:
         self.lambda_: float = lambda_
         self.max_iter: int = max_iter
         self.second_stage: bool = second_stage
         self.coef_ = None
         self.intercept_ = None
+        self.silence = silence
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         ######normalize data ( x&y ) -> zero mean
@@ -44,8 +46,8 @@ class Lasso():
         p = X.shape[1]
         l = np.ones((n,1))
         x_mean = X.mean(axis=0)
-        x_std = X.std(axis=0)
-        x = (X-np.dot(l, x_mean.reshape(1, p))) / np.dot(l, x_std.reshape(1, p))
+        x_var = X.var(axis=0)
+        x = X-np.dot(l, x_mean.reshape(1, p))
         #y
         y_mean = Y.mean()
         y = Y - y_mean
@@ -59,20 +61,23 @@ class Lasso():
                 r_j = r + beta[j] * x[:, j]
                 z = np.dot(x[:, j].T, r_j) / n
                 #update
-                beta[j] = _soft_thresholding(z, self.lambda_)
+                beta[j] = _soft_thresholding(z, self.lambda_) / x_var[j]
                 r = r - (beta[j] - pre_beta[j]) * x[:, j]
 
             mse = (r**2).mean()
             pre_mse = (pre_r**2).mean()
             if (pre_mse-mse)/pre_mse < 0.0001:
-                print("Nearly stop improve in iter %d" % iteration)
-                print("previous mse:%.4f , current mse:%.4f"%(pre_mse,mse))
+                if not self.silence:
+                    print("Nearly stop improve in iter %d" % iteration)
+                    print("previous mse:%.4f , current mse:%.4f"%(pre_mse,mse))
+                if pre_mse < mse:
+                    beta = pre_beta.copy()
                 break
             pre_r = r
             pre_beta = beta.copy()
 
         ######compute the original beta s and the intercept
-        beta_ = beta / x_std
+        beta_ = beta.copy()
         if self.second_stage:
             beta_ = second_stage_thresholding(beta_, p)
         intercept = - (x_mean * beta_).sum() + y_mean
@@ -89,13 +94,14 @@ class Lasso():
 class MCP():
 
     def __init__(self, lambda_: float = 0.1, gamma_:float = 1.5,
-                 max_iter: int = 1000, second_stage: bool =False) -> None:
+                 max_iter: int = 1000, second_stage: bool =False,silence: bool =True) -> None:
         self.lambda_: float = lambda_
         self.gamma_: float = gamma_     # gamma_ should be larger than 1
         self.max_iter: int = max_iter
         self.second_stage: bool = second_stage
         self.coef_ = None
         self.intercept_ = None
+        self.silence = silence
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         ######normalize data ( x&y ) -> zero mean
@@ -104,8 +110,8 @@ class MCP():
         p = X.shape[1]
         l = np.ones((n,1))
         x_mean = X.mean(axis=0)
-        x_std = X.std(axis=0)
-        x = (X-np.dot(l, x_mean.reshape(1, p))) / np.dot(l, x_std.reshape(1, p))
+        x_var = X.var(axis=0)
+        x = X-np.dot(l, x_mean.reshape(1, p))
         #y
         y_mean = Y.mean()
         y = Y - y_mean
@@ -120,21 +126,24 @@ class MCP():
                 z = np.dot(x[:, j].T, r_j) / n
                 #update
                 if np.abs(z) <= self.lambda_ * self.gamma_:
-                    beta[j] = _soft_thresholding(z, self.lambda_) / (1-1/self.gamma_)
+                    beta[j] = _soft_thresholding(z, self.lambda_) / (x_var[j] * (1-1/self.gamma_))
                 else:
-                    beta[j] = z
+                    beta[j] = z / x_var[j]
                 r = r - (beta[j] - pre_beta[j]) * x[:, j]
             mse = (r**2).mean()
             pre_mse = (pre_r**2).mean()
             if (pre_mse-mse)/pre_mse < 0.0001:
-                print("Nearly stop improve in iter %d" % iteration)
-                print("previous mse:%.4f , current mse:%.4f"%(pre_mse,mse))
+                if not self.silence:
+                    print("Nearly stop improve in iter %d" % iteration)
+                    print("previous mse:%.4f , current mse:%.4f"%(pre_mse,mse))
+                if pre_mse < mse:
+                    beta = pre_beta.copy()
                 break
             pre_r = r
             pre_beta = beta.copy()
 
         ######compute the original beta s and the intercept
-        beta_ = beta / x_std
+        beta_ = beta.copy()
         if self.second_stage:
             beta_ = second_stage_thresholding(beta_, p)
         intercept = - (x_mean * beta_).sum() + y_mean
@@ -151,13 +160,14 @@ class MCP():
 class spline_Lasso():
 
     def __init__(self, lambda_1: float = 0.1, lambda_2: float=0.1,
-                 max_iter: int = 1000, second_stage: bool =True) -> None:
+                 max_iter: int = 1000, second_stage: bool =True,silence: bool =True) -> None:
         self.lambda_1: float = lambda_1
         self.lambda_2: float = lambda_2
         self.max_iter: int = max_iter
         self.second_stage: bool = second_stage
         self.coef_ = None
         self.intercept_ = None
+        self.silence = silence
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         ######normalize data ( x&y ) -> zero mean
@@ -173,8 +183,8 @@ class spline_Lasso():
         y_new = np.concatenate([Y, np.zeros(p - 2)])
         l = np.ones((n+p-2,1))
         x_mean = x_new.mean(axis=0)
-        x_std = x_new.std(axis=0)
-        x = (x_new-np.dot(l, x_mean.reshape(1, p))) / np.dot(l, x_std.reshape(1, p))
+        x_var = x_new.var(axis=0)
+        x = x_new-np.dot(l, x_mean.reshape(1, p))
         #y
         y_mean = y_new.mean()
         y = y_new - y_mean
@@ -189,20 +199,23 @@ class spline_Lasso():
                 r_j = r + beta[j] * x[:, j]
                 z = np.dot(x[:, j].T, r_j) / (n+p-2)
                 #update
-                beta[j] = _soft_thresholding(z, self.lambda_1)
+                beta[j] = _soft_thresholding(z, self.lambda_1) / x_var[j]
                 r = r - (beta[j] - pre_beta[j]) * x[:, j]
 
             mse = (r[:n]**2).mean()
             pre_mse = (pre_r[:n]**2).mean()
             if (pre_mse-mse)/pre_mse < 0.0001:
-                print("Nearly stop improve in iter %d" % iteration)
-                print("previous mse:%.4f , current mse:%.4f"%(pre_mse,mse))
+                if not self.silence:
+                    print("Nearly stop improve in iter %d" % iteration)
+                    print("previous mse:%.4f , current mse:%.4f"%(pre_mse,mse))
+                if pre_mse < mse:
+                    beta = pre_beta.copy()
                 break
             pre_r = r
             pre_beta = beta.copy()
 
         ######compute the original beta s and the intercept
-        beta_ = beta / x_std
+        beta_ = beta.copy()
         if self.second_stage:
             beta_ = second_stage_thresholding(beta_, p)
         intercept = - (x_mean * beta_).sum() + y_mean
@@ -219,7 +232,7 @@ class spline_Lasso():
 class spline_MCP():
 
     def __init__(self, lambda_1: float = 0.1, gamma_:float = 1.5,lambda_2:float = 0.1,
-                 max_iter: int = 1000, second_stage: bool =False) -> None:
+                 max_iter: int = 1000, second_stage: bool =False,silence: bool =True) -> None:
         self.lambda_1: float = lambda_1
         self.gamma_: float = gamma_     # gamma_ should be larger than 1
         self.lambda_2: float = lambda_2
@@ -227,6 +240,7 @@ class spline_MCP():
         self.second_stage: bool = second_stage
         self.coef_ = None
         self.intercept_ = None
+        self.silence = silence
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         ######normalize data ( x&y ) -> zero mean
@@ -242,8 +256,8 @@ class spline_MCP():
         y_new = np.concatenate([Y, np.zeros(p - 2)])
         l = np.ones((n + p - 2, 1))
         x_mean = x_new.mean(axis=0)
-        x_std = x_new.std(axis=0)
-        x = (x_new - np.dot(l, x_mean.reshape(1, p))) / np.dot(l, x_std.reshape(1, p))
+        x_var = x_new.var(axis=0)
+        x = (x_new - np.dot(l, x_mean.reshape(1, p)))
         # y
         y_mean = y_new.mean()
         y = y_new - y_mean
@@ -258,21 +272,24 @@ class spline_MCP():
                 z = np.dot(x[:, j].T, r_j) / (n+p-2)
                 #update
                 if np.abs(z) <= self.lambda_1 * self.gamma_:
-                    beta[j] = _soft_thresholding(z, self.lambda_1) / (1 - 1 / self.gamma_)
+                    beta[j] = _soft_thresholding(z, self.lambda_1) / (x_var[j]*(1 - 1 / self.gamma_))
                 else:
-                    beta[j] = z
+                    beta[j] = z / x_var[j]
                 r = r - (beta[j] - pre_beta[j]) * x[:, j]
             mse = (r[:n]**2).mean()
             pre_mse = (pre_r[:n]**2).mean()
             if (pre_mse-mse)/pre_mse < 0.0001:
-                print("Nearly stop improve in iter %d" % iteration)
-                print("previous mse:%.4f , current mse:%.4f"%(pre_mse,mse))
+                if not self.silence:
+                    print("Nearly stop improve in iter %d" % iteration)
+                    print("previous mse:%.4f , current mse:%.4f"%(pre_mse,mse))
+                if pre_mse < mse:
+                    beta = pre_beta.copy()
                 break
             pre_r = r
             pre_beta = beta.copy()
 
         ######compute the original beta s and the intercept
-        beta_ = beta / x_std
+        beta_ = beta.copy()
         if self.second_stage:
             beta_ = second_stage_thresholding(beta_, p)
         intercept = - (x_mean * beta_).sum() + y_mean
@@ -289,13 +306,14 @@ class spline_MCP():
 class smooth_Lasso():
 
     def __init__(self, lambda_1: float = 0.1, lambda_2: float=0.1,
-                 max_iter: int = 1000, second_stage: bool =True) -> None:
+                 max_iter: int = 1000, second_stage: bool =True,silence: bool =True) -> None:
         self.lambda_1: float = lambda_1
         self.lambda_2: float = lambda_2
         self.max_iter: int = max_iter
         self.second_stage: bool = second_stage
         self.coef_ = None
         self.intercept_ = None
+        self.silence = silence
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         ######normalize data ( x&y ) -> zero mean
@@ -311,8 +329,8 @@ class smooth_Lasso():
         y_new = np.concatenate([Y, np.zeros(p - 1)])
         l = np.ones((n+p-1,1))
         x_mean = x_new.mean(axis=0)
-        x_std = x_new.std(axis=0)
-        x = (x_new-np.dot(l, x_mean.reshape(1, p))) / np.dot(l, x_std.reshape(1, p))
+        x_var = x_new.var(axis=0)
+        x = (x_new-np.dot(l, x_mean.reshape(1, p)))
         #y
         y_mean = y_new.mean()
         y = y_new - y_mean
@@ -327,20 +345,23 @@ class smooth_Lasso():
                 r_j = r + beta[j] * x[:, j]
                 z = np.dot(x[:, j].T, r_j) / (n+p-1)
                 #update
-                beta[j] = _soft_thresholding(z, self.lambda_1)
+                beta[j] = _soft_thresholding(z, self.lambda_1) / x_var[j]
                 r = r - (beta[j] - pre_beta[j]) * x[:, j]
 
             mse = (r[:n]**2).mean()
             pre_mse = (pre_r[:n]**2).mean()
             if (iteration>10) and ((pre_mse-mse)/pre_mse < 0.0001):
-                print("Nearly stop improve in iter %d" % iteration)
-                print("previous mse:%.4f , current mse:%.4f"%(pre_mse,mse))
+                if not self.silence:
+                    print("Nearly stop improve in iter %d" % iteration)
+                    print("previous mse:%.4f , current mse:%.4f"%(pre_mse,mse))
+                if pre_mse < mse:
+                    beta = pre_beta.copy()
                 break
             pre_r = r
             pre_beta = beta.copy()
 
         ######compute the original beta s and the intercept
-        beta_ = beta / x_std
+        beta_ = beta.copy()
         if self.second_stage:
             beta_ = second_stage_thresholding(beta_, p)
         intercept = - (x_mean * beta_).sum() + y_mean
@@ -357,13 +378,14 @@ class smooth_Lasso():
 class fused_Lasso():
 
     def __init__(self, lambda_1: float = 0.1, lambda_2: float=0.1,
-                 max_iter: int = 1000, second_stage: bool =True) -> None:
+                 max_iter: int = 10, second_stage: bool =True,silence: bool =True) -> None:
         self.lambda_1: float = lambda_1
         self.lambda_2: float = lambda_2
         self.max_iter: int = max_iter
         self.second_stage: bool = second_stage
         self.coef_ = None
         self.intercept_ = None
+        self.silence = silence
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         ######normalize data ( x&y ) -> zero mean
@@ -372,8 +394,8 @@ class fused_Lasso():
         p = X.shape[1]
         l = np.ones((n,1))
         x_mean = X.mean(axis=0)
-        x_std = X.std(axis=0)
-        x = (X-np.dot(l, x_mean.reshape(1, p))) / np.dot(l, x_std.reshape(1, p))
+        x_var = X.var(axis=0)
+        x = X-np.dot(l, x_mean.reshape(1, p))
         #y
         y_mean = Y.mean()
         y = Y - y_mean
@@ -381,38 +403,43 @@ class fused_Lasso():
         for i in range(p - 1):
             L[i, i] = 1
             L[i, i + 1] = -1
-        def loss(betas):
-            r = y - np.dot(x,betas.reshape(p,1))
-            reg_l1 = self.lambda_1 * np.abs(betas).sum()
-            reg_fused = self.lambda_2 * np.abs(np.dot(L,betas.reshape(p,1))).sum()
-            return (r**2).mean() + reg_l1 + reg_fused
 
-        ######iteration
         beta = np.zeros(p)
-        pre_beta = np.zeros(p)
-        r = y.copy()   # residual
-        pre_r = y.copy()
-        for iteration in range(1, (1+self.max_iter)):
-            for j in range(p):
-                def tmp_loss(beta_j):
-                    tmp_beta = beta.copy()
-                    tmp_beta[j] = beta_j
-                    return loss(tmp_beta)
-                minunum = brute(tmp_loss, [(-10,10)], Ns=100)
-                beta[j] = minunum[0]
-                r = r - (beta[j] - pre_beta[j]) * x[:, j]
+        def loss(beta_j, y, j,pre_beta,later_beta):
+            r = y - beta_j*x[:,j]
+            reg_l1 = self.lambda_1 * np.abs(beta_j)
+            if 0<j<p-1  :
+                reg_fused = self.lambda_2 * (np.abs(beta_j-pre_beta) + np.abs(beta_j-later_beta))
+            elif j==0:
+                reg_fused = self.lambda_2 * np.abs(beta_j - later_beta)
+            elif j==p-1:
+                reg_fused = self.lambda_2 * np.abs(beta_j - pre_beta)
+            loss =  (r**2).mean() + reg_l1 + reg_fused
+            return loss
 
-            mse = (r[:n]**2).mean()
-            pre_mse = (pre_r[:n]**2).mean()
-            if (pre_mse-mse)/pre_mse < 0.0001:
-                print("Nearly stop improve in iter %d" % iteration)
-                print("previous mse:%.4f , current mse:%.4f"%(pre_mse,mse))
+        pre_beta = np.zeros(p)
+        r = y.copy()  # residual
+        pre_r = y.copy()
+        for iteration in range(1, (1 + self.max_iter)):
+            for j in range(p):
+                r_j = r + beta[j] * x[:, j]
+                # opt_result = minimize(loss,0.5,args=(r_j,j,beta[max(j-1,0)],beta[min(j+1,p-1)]))
+                opt_result = minimize_scalar(loss, args=(r_j, j, beta[max(j - 1, 0)], beta[min(j + 1, p - 1)]))
+                beta[j] = opt_result.x
+                r = r - (beta[j] - pre_beta[j]) * x[:, j]
+            mse = (r[:n] ** 2).mean()
+            pre_mse = (pre_r[:n] ** 2).mean()
+            if  ((pre_mse - mse) / pre_mse < 0.01):
+                if not self.silence:
+                    print("Nearly stop improve in iter %d" % iteration)
+                    print("previous mse:%.4f , current mse:%.4f" % (pre_mse, mse))
+                if pre_mse < mse:
+                    beta = pre_beta.copy()
                 break
             pre_r = r
             pre_beta = beta.copy()
-
         ######compute the original beta s and the intercept
-        beta_ = beta / x_std
+        beta_ = beta.copy()
         if self.second_stage:
             beta_ = second_stage_thresholding(beta_, p)
         intercept = - (x_mean * beta_).sum() + y_mean
@@ -436,7 +463,7 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
     # generate data
-    data = simulation_data(p=600, n=71, seed=20)
+    data = simulation_data(p=600, n=71)
     mu, cov = data.gen_mu_cov()
     data.gen_beta()
     data.gen_X(mu, cov)
@@ -445,29 +472,27 @@ if __name__ == "__main__":
     ############################
     reg0 = linear_model.Lasso(alpha=0.05)
     #lasso
-    reg1 = Lasso(lambda_=0.1, max_iter=50, second_stage=False)
+    reg1 = Lasso(lambda_=0.01, max_iter=50, second_stage=False)
     #mcp
-    reg2 = MCP(lambda_=0.1,gamma_=1.5,second_stage=False)
+    reg2 = MCP(lambda_=0.01,gamma_=1.5,second_stage=False)
     #spline-lasoo
-    reg3 = spline_Lasso(lambda_1=0.1,lambda_2=0.01,second_stage=False)
+    reg3 = spline_Lasso(lambda_1=0.01,lambda_2=0.01,second_stage=False)
     #spline-MCP
-    reg4 = spline_MCP(lambda_1=0.1,gamma_=1.5,lambda_2=0.1,second_stage=True)
+    reg4 = spline_MCP(lambda_1=0.05,gamma_=2,lambda_2=0.3,second_stage=True)
     #smooth-lasso
-    reg5 = smooth_Lasso(lambda_1=0.1,lambda_2=0.2,second_stage=True)
+    reg5 = smooth_Lasso(lambda_1=0.01,lambda_2=0.2,second_stage=True)
     #fused-lass
-    reg6 = fused_Lasso(lambda_1=0,lambda_2=0,second_stage=False)
+    reg6 = fused_Lasso(lambda_1=0.01,lambda_2=0.5,second_stage=True)
     #test
     # reg0.fit(data.X,data.Y)
     # reg1.fit(data.X,data.Y)
     # reg2.fit(data.X,data.Y)
     # reg3.fit(data.X, data.Y)
-    # reg4.fit(data.X, data.Y)
+    reg4.fit(data.X, data.Y)
     # reg5.fit(data.X, data.Y)
-    reg6.fit(data.X, data.Y)
-    plt.plot(data.beta,"grey")
+    # reg6.fit(data.X, data.Y)
+    plt.plot(data.beta,"bo")
     # plt.plot(reg0.coef_,"g")
-    plt.plot(reg6.coef_,"r")
+    plt.plot(reg4.coef_,"r*")
     plt.show()
-
-
 
