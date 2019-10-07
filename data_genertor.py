@@ -101,15 +101,16 @@ if __name__ == "__main__":
     beta = data.gen_beta(58,21)
     print((beta>0).sum())
     print((beta<0).sum())
-    plt.figure(figsize=(16, 8))
+    plt.figure(figsize=(8, 8))
     plt.plot(beta, "o")
     plt.xlabel("location", fontsize=15)
     plt.ylabel("beta", fontsize=15)
     plt.xticks(fontsize=15)
     plt.yticks(fontsize=15)
-    plt.savefig("test.png")
+    plt.savefig("simulate_result/betas.png")
     plt.show()
     mu,cov = data.gen_mu_cov(case=2)
     data.gen_X(mu,cov)
     data.gen_Y(std=3,form="t")
+
 

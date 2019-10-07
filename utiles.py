@@ -11,13 +11,13 @@ def specificity(beta_true:np.ndarray,beta_predict:np.ndarray):
     num_correct = ((np.sign(beta_predict)==np.sign(beta_true))*(beta_true>0)).sum()
     return num_correct / num_p
 
-#Specificity defined in the paper ( True negative rate)
+#Sensitivity defined in the paper ( True negative rate)
 def sensitivity(beta_true:np.ndarray,beta_predict:np.ndarray):
     num_p = (beta_true < 0).sum()
     num_correct = ((np.sign(beta_predict) == np.sign(beta_true)) * (beta_true < 0)).sum()
     return num_correct / num_p
 
-
+#GridSearchCV used to fine tune the tuning parameters (similar to sklearn.model_selection.GridSearchCV)
 def GridSearchCV(estimator_class,param_grid,X,Y,n_folds=10,loss_func=mse):
     '''
     Fine tune the pre-set parameters of the estimator (eg. lambda in Lasso) use k-fold evaluation

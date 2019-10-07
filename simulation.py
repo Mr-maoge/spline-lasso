@@ -136,3 +136,23 @@ for case in [1,2]:
         plt.show()
         plt.close()
 
+
+#####################output some table used to show in the report
+for noise_level, form in [("low", "norm"), ("high", "norm"), ("low", "t")]:
+    tmp1 = pd.read_csv("simulate_result/result_table_{}_{}.csv".format(noise_level,form))
+    order = ["fused_Lasso","spline_MCP","spline_Lasso","smooth_Lasso","fused_Lasso/Thresh",
+             "spline_Lasso/Thresh","smooth_Lasso/Thresh"]
+    case1 = tmp1[tmp1.case==1][['model', 'testing_mse','beta_specificity',
+                                'beta_sensitivity', 'beta_mse']].set_index("model",drop=True)
+    case1["beta_mse"] = np.sqrt(case1["beta_mse"] * 600)
+    case1 = case1.T
+    case1 = case1.loc[:, order]
+
+    case2 = tmp1[tmp1.case == 2][['model', 'testing_mse', 'beta_specificity',
+                                  'beta_sensitivity', 'beta_mse']].set_index("model", drop=True)
+    case2["beta_mse"] = np.sqrt(case2["beta_mse"] * 600)
+    case2 = case2.T
+    case2 = case2.loc[:,order]
+
+    case1.to_csv("{}_{}_case1.csv".format(noise_level,form))
+    case2.to_csv("{}_{}_case2.csv".format(noise_level,form))
