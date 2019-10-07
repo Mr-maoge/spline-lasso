@@ -9,20 +9,20 @@ from tqdm import tqdm
 np.random.seed(20191005)
 #####################tuning parameters
 params_grid_spline_Lasso = {"lambda_1":[0.01,0.02],
-                            "lambda_2":[0.1,0.2],
+                            "lambda_2":[0.2,0.3],
                             }
 
-params_grid_spline_MCP = {"lambda_1":[0.01,0.15,0.02],
-                          "gamma_":[1.2,1.5,2],
-                          "lambda_2":[0.1,0.15,0.2],
+params_grid_spline_MCP = {"lambda_1":[0.01,0.02],
+                          "gamma_":[2],
+                          "lambda_2":[0.2,0.3],
                          }
 
-params_grid_smooth_Lasso = {"lambda_1":[0.01,0.015,0.02],
-                            "lambda_2":[0.1,0.15,0.2],
+params_grid_smooth_Lasso = {"lambda_1":[0.01,0.02],
+                            "lambda_2":[0.2,0.4],
                             }
 
 params_grid_fused_Lasso = {"lambda_1":[0.01],
-                            "lambda_2":[0.15],
+                            "lambda_2":[0.2,0.3],
                            }
 
 #####################some preparation
@@ -37,7 +37,7 @@ for name in models_name:
 
 #####################do the simulation
 def simulate(noise_level="low",form="norm"):
-    repeat_times = 1
+    repeat_times = 20
     if noise_level == "low":
         noise_std = 1
     else:
@@ -56,14 +56,14 @@ def simulate(noise_level="low",form="norm"):
         beta_mse = np.zeros(len(models_class)*2)
         beta_specificity = np.zeros(len(models_class)*2)
         beta_sensitivity = np.zeros(len(models_class)*2)
-        for _ in tqdm(range(repeat_times)):
+        for t in tqdm(range(repeat_times)):
             #generate data
             data = simulation_data(p=600, n=71)
             mu, cov = data.gen_mu_cov(case=case)
             data.gen_beta()
             data.gen_X(mu, cov)
             data.gen_Y(std=noise_std, form=form)
-            if _ == repeat_times-1:
+            if t == repeat_times-1:
                 data_set.append(data)
 
             for i in range(len(models_class)):
@@ -88,14 +88,14 @@ def simulate(noise_level="low",form="norm"):
                 beta_mse[i*2] += beta_mse1 / repeat_times
                 beta_specificity[i*2] += beta_specificity1 / repeat_times
                 beta_sensitivity[i*2] += beta_sensitivity1 / repeat_times
-                if _ == repeat_times-1:
+                if t == repeat_times-1:
                     info_set[case-1].append(best_info1)
 
                 testing_mse[i*2+1] += testing_mse2 / repeat_times
                 beta_mse[i*2+1] += beta_mse2 / repeat_times
                 beta_specificity[i*2+1] += beta_specificity2 / repeat_times
                 beta_sensitivity[i*2+1] += beta_sensitivity2 / repeat_times
-                if _ == repeat_times - 1:
+                if t == repeat_times - 1:
                     info_set[case - 1].append(best_info2)
 
         result_table.loc[result_table["case"]==case,"beta_mse"] = beta_mse
@@ -110,68 +110,29 @@ for noise_level,form in [("low","norm"),("high","norm"),("low","t")]:
     print("="*10+"noise_level: {} , form: {}".format(noise_level,form)+"="*10)
     result_table, info_set, data_set = simulate(noise_level,form)
     result_table.to_csv("simulate_result/result_table_{}_{}.csv".format(noise_level,form))
-    pickle.dump(info_set,open("simulate_result/info_set_{}_{}.pkl","wb"))
-    pickle.dump(data_set, open("simulate_result/data_set_{}_{}.pkl", "wb"))
+    pickle.dump(info_set,open("simulate_result/info_set_{}_{}.pkl".format(noise_level,form),"wb"))
+    pickle.dump(data_set, open("simulate_result/data_set_{}_{}.pkl".format(noise_level,form), "wb"))
 
 #####################some analysis (plot)
 info_set = pickle.load(open("simulate_result/info_set_low_norm.pkl","rb"))
 data_set = pickle.load(open("simulate_result/data_set_low_norm.pkl","rb"))
 
-##case 1
-data = data_set[0]
-model1 = info_set[0][1]    #spline-Lasso/Thresh
-model2 = info_set[0][3]    #spline-MCP/Tresh
-
-plt.figure(figsize=(16,8))
-plt.plot(data.beta,"bo")
-plt.plot(model1.beta,"g*")
-plt.xlabel("location",fontsize=15)
-plt.ylabel("beta",fontsize=15)
-plt.xticks(fontsize=15)
-plt.yticks(fontsize=15)
-plt.title("Spline-Lasso/Thresh Estimation",fontsize=15)
-plt.savefig("simulate_result/case1_Spline_Lasso_Thresh.png")
-plt.show()
-plt.close()
-
-plt.figure(figsize=(16,8))
-plt.plot(data.beta,"bo")
-plt.plot(model2.beta,"g*")
-plt.xlabel("location",fontsize=15)
-plt.ylabel("beta",fontsize=15)
-plt.xticks(fontsize=15)
-plt.yticks(fontsize=15)
-plt.title("Spline-Lasso/Thresh Estimation",fontsize=15)
-plt.savefig("simulate_result/case1_Spline_MCP_Thresh.png")
-plt.show()
-plt.close()
-
-#case 2
-data = data_set[1]
-model1 = info_set[1][1]    #spline-Lasso/Thresh
-model2 = info_set[1][3]    #spline-MCP/Tresh
-
-plt.figure(figsize=(16,8))
-plt.plot(data.beta,"bo")
-plt.plot(model1.beta,"g*")
-plt.xlabel("location",fontsize=15)
-plt.ylabel("beta",fontsize=15)
-plt.xticks(fontsize=15)
-plt.yticks(fontsize=15)
-plt.title("Spline-Lasso/Thresh Estimation",fontsize=15)
-plt.savefig("simulate_result/case2_Spline_Lasso_Thresh.png")
-plt.show()
-plt.close()
-
-plt.figure(figsize=(16,8))
-plt.plot(data.beta,"bo")
-plt.plot(model2.beta,"g*")
-plt.xlabel("location",fontsize=15)
-plt.ylabel("beta",fontsize=15)
-plt.xticks(fontsize=15)
-plt.yticks(fontsize=15)
-plt.title("Spline-Lasso/Thresh Estimation",fontsize=15)
-plt.savefig("simulate_result/case2_Spline_MCP_Thresh.png")
-plt.show()
-plt.close()
+for case in [1,2]:
+    data = data_set[case - 1]
+    info = info_set[case-1]
+    for i in range(len(result_models_name)):
+        model = info[i]
+        model_name = result_models_name[i]
+        plt.figure(figsize=(16,8))
+        plt.plot(data.beta,"bo")
+        plt.plot(model["estimator"].coef_,"g*")
+        plt.legend(["True Beta","Fitted Beta"],fontsize=15)
+        plt.xlabel("location",fontsize=15)
+        plt.ylabel("beta",fontsize=15)
+        plt.xticks(fontsize=15)
+        plt.yticks(fontsize=15)
+        plt.title("%s Estimation"%model_name,fontsize=15)
+        plt.savefig("simulate_result/beta_plots/case%d_%s.png"%(case,model_name.replace("/","_")))
+        plt.show()
+        plt.close()
 

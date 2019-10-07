@@ -2,12 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="69c27801-c133-4cd7-ba90-463494c4befe" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simulation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utiles.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_genertor.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_genertor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulate_result/result_table_high_norm.csv" beforeDir="false" afterPath="$PROJECT_DIR$/simulate_result/result_table_high_norm.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulate_result/result_table_high_t.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulate_result/result_table_low_norm.csv" beforeDir="false" afterPath="$PROJECT_DIR$/simulate_result/result_table_low_norm.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulate_result/result_table_low_t.csv" beforeDir="false" afterPath="$PROJECT_DIR$/simulate_result/result_table_low_t.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,53 +21,27 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data_genertor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="334">
-              <caret line="109" column="14" selection-start-line="109" selection-start-column="14" selection-end-line="109" selection-end-column="14" />
+            <state relative-caret-position="171">
+              <caret line="16" selection-start-line="16" selection-end-line="16" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <element signature="e#255#484#0" />
-                <element signature="e#2177#2555#0" />
-                <element signature="e#2613#2990#0" />
-                <element signature="e#2971#3238#0" />
+                <element signature="e#246#450#0" />
+                <element signature="e#526#2109#0" />
+                <element signature="e#2149#2165#0" />
+                <element signature="e#2208#2586#0" />
+                <element signature="e#3001#3268#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="156">
-              <caret line="158" lean-forward="true" selection-start-line="158" selection-end-line="158" />
+            <state relative-caret-position="27">
+              <caret line="230" selection-start-line="230" selection-end-line="230" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <element signature="e#122#366#0" />
-                <element signature="e#413#739#0" />
-                <element signature="e#776#2823#0" />
-                <element signature="e#1098#1139#0" />
-                <element signature="e#2591#2680#0" />
-                <element signature="e#2753#4884#0" />
-                <element signature="e#3200#4747#0" />
-                <element signature="e#3148#3189#0" />
-                <element signature="e#3684#4417#0" />
-                <element signature="e#3736#4117#0" />
-                <element signature="e#4778#4867#0" />
-                <element signature="e#5014#7363#0" />
-                <element signature="e#5314#5355#0" />
-                <element signature="e#5487#5551#0" />
-                <element signature="e#7115#7204#0" />
-                <element signature="e#7232#9788#0" />
-                <element signature="e#7743#9651#0" />
-                <element signature="e#7918#7986#0" />
-                <element signature="e#9699#9788#0" />
-                <element signature="e#9818#12121#0" />
-                <element signature="e#10235#10276#0" />
-                <element signature="e#10408#10446#0" />
-                <element signature="e#12032#12121#0" />
-                <element signature="e#12436#15026#0" />
-                <element signature="e#13356#13820#0" />
-                <element signature="e#14541#14630#0" />
-                <element signature="e#14664#14674#0" />
               </folding>
             </state>
           </provider>
@@ -75,47 +50,27 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utiles.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="91" lean-forward="true" selection-start-line="91" selection-end-line="91" />
+            <state relative-caret-position="2323">
+              <caret line="91" selection-start-line="91" selection-end-line="91" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <element signature="e#94#133#0" />
-                <element signature="e#228#370#0" />
-                <element signature="e#439#589#0" />
-                <element signature="e#240#2512#0" />
-                <element signature="e#270#379#1" />
-                <element signature="e#428#983#0" />
-                <element signature="e#502#965#0" />
-                <element signature="e#574#875#0" />
-                <element signature="e#717#846#0" />
-                <element signature="e#910#965#0" />
-                <element signature="e#989#1485#0" />
-                <element signature="e#1294#1583#0" />
-                <element signature="e#1926#2771#0" />
-                <element signature="e#1991#2278#0" />
-                <element signature="e#2722#2771#0" />
-                <element signature="e#2546#2801#0" />
+                <element signature="e#542#692#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simulation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2511">
-              <caret line="177" lean-forward="true" selection-start-line="177" selection-end-line="177" />
+            <state relative-caret-position="108">
+              <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
-                <element signature="e#275#393#0" />
-                <element signature="e#420#582#0" />
-                <element signature="e#614#732#0" />
-                <element signature="e#710#813#0" />
-                <element signature="e#995#1120#0" />
-                <element signature="e#1186#1267#0" />
-                <element signature="e#1444#4876#0" />
-                <element signature="e#2420#3994#0" />
-                <element signature="e#4953#5334#0" />
+                <element signature="e#1299#1376#0" />
+                <element signature="e#1466#4882#0" />
+                <element signature="e#4959#5340#0" />
+                <element signature="e#5592#6181#0" />
               </folding>
             </state>
           </provider>
@@ -143,9 +98,9 @@
       <list>
         <option value="$PROJECT_DIR$/utiles.py" />
         <option value="$PROJECT_DIR$/simulate_result/analysis.py" />
+        <option value="$PROJECT_DIR$/models.py" />
         <option value="$PROJECT_DIR$/data_genertor.py" />
         <option value="$PROJECT_DIR$/simulation.py" />
-        <option value="$PROJECT_DIR$/models.py" />
       </list>
     </option>
   </component>
@@ -205,7 +160,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.data_genertor">
+  <component name="RunManager" selected="Python.simulation">
     <configuration name="data_genertor" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="simulation_code" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -229,6 +184,9 @@
       <module name="simulation_code" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="C:\Users\Thinkpad\Anaconda3\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -267,6 +225,9 @@
       <module name="simulation_code" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="C:\Users\Thinkpad\Anaconda3\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -304,9 +265,9 @@
     <list>
       <item itemvalue="Pyramid server.Unnamed" />
       <item itemvalue="Python.data_genertor" />
-      <item itemvalue="Python.utiles" />
-      <item itemvalue="Python.simulation" />
       <item itemvalue="Python.models" />
+      <item itemvalue="Python.simulation" />
+      <item itemvalue="Python.utiles" />
     </list>
   </component>
   <component name="SvnConfiguration">
@@ -324,22 +285,23 @@
       <workItem from="1569720409190" duration="16836000" />
       <workItem from="1569806263252" duration="4678000" />
       <workItem from="1570155512603" duration="3571000" />
-      <workItem from="1570267908987" duration="30941000" />
+      <workItem from="1570267908987" duration="31691000" />
+      <workItem from="1570366016466" duration="9429000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="82050000" />
+    <option name="totallyTimeSpent" value="92229000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17424242" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.17727272" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32838285" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.4389439" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.35478547" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -350,11 +312,11 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info anchor="bottom" id="Python Console" order="12" visible="true" weight="0.26072606" />
+      <window_info anchor="bottom" id="Python Console" order="12" visible="true" weight="0.47524753" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" weight="0.4780303" />
+      <window_info anchor="right" id="SciView" order="3" weight="0.6439394" />
       <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
@@ -376,7 +338,7 @@
     <SUITE FILE_PATH="coverage/simulation_code$data_genertor.coverage" NAME="data_genertor Coverage Results" MODIFIED="1569587761191" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/simulation_code$utiles.coverage" NAME="utiles Coverage Results" MODIFIED="1570275866002" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/simulation_code$models.coverage" NAME="models Coverage Results" MODIFIED="1570330077987" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/simulation_code$simulation.coverage" NAME="simulation Coverage Results" MODIFIED="1570324034612" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/simulation_code$simulation.coverage" NAME="simulation Coverage Results" MODIFIED="1570375358079" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/sklearn/linear_model/coordinate_descent.py">
@@ -397,13 +359,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="352" selection-start-line="352" selection-end-line="352" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/IPython/core/interactiveshell.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="3295" selection-start-line="3295" selection-end-line="3295" />
         </state>
       </provider>
     </entry>
@@ -569,108 +524,60 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulate_result/analysis.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="5" selection-start-line="5" selection-end-line="6" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/simulate_result/analysis.py" />
     <entry file="file://$PROJECT_DIR$/data_genertor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="109" column="14" selection-start-line="109" selection-start-column="14" selection-end-line="109" selection-end-column="14" />
+        <state relative-caret-position="171">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#255#484#0" />
-            <element signature="e#2177#2555#0" />
-            <element signature="e#2613#2990#0" />
-            <element signature="e#2971#3238#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simulation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2511">
-          <caret line="177" lean-forward="true" selection-start-line="177" selection-end-line="177" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-            <element signature="e#275#393#0" />
-            <element signature="e#420#582#0" />
-            <element signature="e#614#732#0" />
-            <element signature="e#710#813#0" />
-            <element signature="e#995#1120#0" />
-            <element signature="e#1186#1267#0" />
-            <element signature="e#1444#4876#0" />
-            <element signature="e#2420#3994#0" />
-            <element signature="e#4953#5334#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utiles.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="91" lean-forward="true" selection-start-line="91" selection-end-line="91" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#94#133#0" />
-            <element signature="e#228#370#0" />
-            <element signature="e#439#589#0" />
-            <element signature="e#240#2512#0" />
-            <element signature="e#270#379#1" />
-            <element signature="e#428#983#0" />
-            <element signature="e#502#965#0" />
-            <element signature="e#574#875#0" />
-            <element signature="e#717#846#0" />
-            <element signature="e#910#965#0" />
-            <element signature="e#989#1485#0" />
-            <element signature="e#1294#1583#0" />
-            <element signature="e#1926#2771#0" />
-            <element signature="e#1991#2278#0" />
-            <element signature="e#2722#2771#0" />
-            <element signature="e#2546#2801#0" />
+            <element signature="e#246#450#0" />
+            <element signature="e#526#2109#0" />
+            <element signature="e#2149#2165#0" />
+            <element signature="e#2208#2586#0" />
+            <element signature="e#3001#3268#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="158" lean-forward="true" selection-start-line="158" selection-end-line="158" />
+        <state relative-caret-position="27">
+          <caret line="230" selection-start-line="230" selection-end-line="230" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#122#366#0" />
-            <element signature="e#413#739#0" />
-            <element signature="e#776#2823#0" />
-            <element signature="e#1098#1139#0" />
-            <element signature="e#2591#2680#0" />
-            <element signature="e#2753#4884#0" />
-            <element signature="e#3200#4747#0" />
-            <element signature="e#3148#3189#0" />
-            <element signature="e#3684#4417#0" />
-            <element signature="e#3736#4117#0" />
-            <element signature="e#4778#4867#0" />
-            <element signature="e#5014#7363#0" />
-            <element signature="e#5314#5355#0" />
-            <element signature="e#5487#5551#0" />
-            <element signature="e#7115#7204#0" />
-            <element signature="e#7232#9788#0" />
-            <element signature="e#7743#9651#0" />
-            <element signature="e#7918#7986#0" />
-            <element signature="e#9699#9788#0" />
-            <element signature="e#9818#12121#0" />
-            <element signature="e#10235#10276#0" />
-            <element signature="e#10408#10446#0" />
-            <element signature="e#12032#12121#0" />
-            <element signature="e#12436#15026#0" />
-            <element signature="e#13356#13820#0" />
-            <element signature="e#14541#14630#0" />
-            <element signature="e#14664#14674#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utiles.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2323">
+          <caret line="91" selection-start-line="91" selection-end-line="91" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#542#692#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/IPython/core/interactiveshell.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="106">
+          <caret line="3295" selection-start-line="3295" selection-end-line="3295" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simulation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+            <element signature="e#1299#1376#0" />
+            <element signature="e#1466#4882#0" />
+            <element signature="e#4959#5340#0" />
+            <element signature="e#5592#6181#0" />
           </folding>
         </state>
       </provider>

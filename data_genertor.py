@@ -15,7 +15,7 @@ class simulation_data():
         self.beta = np.zeros(self.p)
         self.noise = None
 
-    def gen_beta(self,num_part1=58, num_part2=21,intercept=None):
+    def gen_beta(self,num_part1=54, num_part2=25,intercept=None):
         """
             Used to generate the beta s for stimulation tests
             num_part1 + num_part2 = the number of beta s to be non-zero
@@ -36,10 +36,11 @@ class simulation_data():
         num_p1_1 = num_part1 // 8
         num_p2_2 = num_part1 - num_p1_1
         sep_point = int(num_p2_2 * 0.8)
-        tmp1 = np.sin([np.pi/(num_p2_2-4) * i for i in range(1,sep_point)]) * 3
+        tmp1 = np.sin([np.pi/(num_p2_2-6) * i for i in range(1,sep_point)]) * 3
         tmp2 = np.ones(num_p1_1) * tmp1[-1]
-        tmp3 = np.sin([np.pi/(num_p2_2-4) * i for i in range(sep_point,num_p2_2+1)]) * 3
-        part1 = np.concatenate([tmp1,tmp2,tmp3])
+        tmp3 = np.sin([np.pi/(num_p2_2-6) * i for i in range(sep_point,num_p2_2-3)]) * 3
+        tmp4 = np.linspace(tmp3[-1]+0.1,0,4,endpoint=False)
+        part1 = np.concatenate([tmp1,tmp2,tmp3,tmp4])
 
         #part2
         num_p2_1 = num_part2 // 2 + 1
